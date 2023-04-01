@@ -3,7 +3,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
-import { DeletePerson, handlePersonDelete } from './ApiHandler';
+import { DeletePerson } from '../ApiHandler';
 
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (

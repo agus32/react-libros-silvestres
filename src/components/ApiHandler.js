@@ -6,7 +6,7 @@ const API_PORT = 3002;
 export const GetPeople = async (type) => {
     // type =  'autor' || 'ilustrador' ?tipo=${type}
     
-    const URL = `http://localhost:${API_PORT}/persona`;
+    const URL = `http://localhost:${API_PORT}/persona?tipo=${type}`;
     try{
         const response = await fetch(URL);
         const data = await response.json();

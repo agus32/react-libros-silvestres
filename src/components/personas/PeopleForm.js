@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { PostPerson } from "./ApiHandler";
+import { PostPerson } from "../ApiHandler";
 
 
 export const PeopleForm = ({type,setPeople,prevPeople}) => {
