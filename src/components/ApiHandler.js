@@ -1,12 +1,25 @@
 import React from "react";
 
-const API_PORT = 3002;
+const API_PORT = 3001;
 
 
 export const GetPeople = async (type) => {
     // type =  'autor' || 'ilustrador' ?tipo=${type}
     
     const URL = `http://localhost:${API_PORT}/persona?tipo=${type}`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const GetPersonas = async () => {
+
+    
+    const URL = `http://localhost:${API_PORT}/persona`;
     try{
         const response = await fetch(URL);
         const data = await response.json();
@@ -31,6 +44,22 @@ export const PostPeople = async (inputs) => {
     }
 }
 
+export const PostLibro = async (inputs) => {
+    const URL = `http://localhost:${API_PORT}/libro`;
+    try{
+        const response = await fetch(URL, {
+            method: "POST",
+            body: inputs,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        !response.ok ? alert(data.error) : alert("Libro creado con exito");
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
 
 export const PostPerson = async (inputs) => {
     try{
@@ -41,7 +70,7 @@ export const PostPerson = async (inputs) => {
             });
         const data = await response.json();
         
-        !response.ok ? alert(data.error) : alert("Persona creada con exito");
+        !response.ok ? alert(data.error) : alert(data.message);
         return data;
     }catch(error){
         console.log(error);
@@ -64,7 +93,6 @@ export const DeletePerson = async (id) => {
         console.log(error);
     }
 }
-
 
 
 
