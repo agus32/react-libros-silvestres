@@ -29,6 +29,19 @@ export const GetPersonas = async () => {
     }
 }
 
+export const GetLibros = async () => {
+
+    
+    const URL = `http://localhost:${API_PORT}/libro`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
 export const PostPeople = async (inputs) => {
     const URL = `http://localhost:${API_PORT}/persona`;
     try{
@@ -44,6 +57,23 @@ export const PostPeople = async (inputs) => {
     }
 }
 
+export const PutLibro = async ({edit,isbn}) => {
+    const URL = `http://localhost:${API_PORT}/libro/${isbn}`;
+    try{
+        const response = await fetch(URL, {
+            method: "PUT",
+            body: edit,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        console.log(data);
+        !response.ok || !data.success ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
 export const PostLibro = async (inputs) => {
     const URL = `http://localhost:${API_PORT}/libro`;
     try{
@@ -53,7 +83,7 @@ export const PostLibro = async (inputs) => {
             headers: {"Content-type": "application/json; charset=UTF-8"}
             });
         const data = await response.json();
-        !response.ok ? alert(data.error) : alert("Libro creado con exito");
+        !response.ok ? alert(data.error) : alert(data.message);
         return data;
     }catch(error){
         console.log(error);

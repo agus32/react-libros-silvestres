@@ -47,7 +47,7 @@ const ModalNuevaPersona = ({type,setPerson,person}) => {
                 <Form.Label>Email</Form.Label>                                      
                 <Form.Control className="mb-3" name="email" placeholder="Email" value={inputs.email || ""} onChange={handleChange}/>
                 <Form.Label>DNI</Form.Label>                                     
-                <Form.Control className="mb-3" type="number" max="99999999" name="dni" placeholder="DNI" value={inputs.dni || 0} onChange={handleChange}/>                     
+                <Form.Control className="mb-3" type="number" max="99999999" name="dni" placeholder="DNI" value={inputs.dni} onChange={handleChange}/>                     
             </Form>
           </Modal.Body>
           <Modal.Footer>

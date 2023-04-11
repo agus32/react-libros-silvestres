@@ -1,11 +1,12 @@
 import { NavBar } from './components/NavBar';
 import './App.css';
-import { GetPersonas, GetPeople } from './components/ApiHandler';
+import { GetPersonas, GetPeople, GetLibros } from './components/ApiHandler';
 import { useEffect,React,useState } from 'react';
 import { DataPersonTable } from './components/personas/DataTable';
 import { Route, Routes } from 'react-router-dom';
 import { NuevoLibro } from './components/libros/NuevoLibro';
-import { AddBook }  from './components/libros/AddBook';
+import { ListaLibros } from './components/libros/ListaLibros';
+
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
     );
   }
 
+
   const Ilustradores = () => {
     const [illustrators,setIllustrators] = useState([]);
 
@@ -52,6 +54,19 @@ function App() {
     </div>
     );
   }
+  const ListarLibros = () => {
+    const [libros,setLibros] = useState([]);
+    const fetchLibros = async () => {
+      const data = await GetLibros();
+      setLibros(data);
+      console.log(data);
+    }
+    useEffect(() => {fetchLibros()},[]);
+    return(
+      <ListaLibros libros={libros}/>
+    );
+  }
+
 
   const CrearLibro = () => {
     const [personas,setPersonas] = useState([]);
@@ -75,7 +90,7 @@ function App() {
       <NavBar/>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/lista-libros" element={<AddBook/>}/>
+        <Route path="/lista-libros" element={<ListarLibros/>}/>
         <Route path="/nuevo-libro" element={<CrearLibro/>}/>
         <Route path="/ventas" element={<h1>a</h1>}/>
         <Route path="/autores" element={<Autores/>}/>
