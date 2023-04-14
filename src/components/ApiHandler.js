@@ -42,6 +42,19 @@ export const GetLibros = async () => {
     }
 }
 
+export const GetLibro = async (isbn) => {
+
+    
+    const URL = `http://localhost:${API_PORT}/libro/${isbn}`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
 export const PostPeople = async (inputs) => {
     const URL = `http://localhost:${API_PORT}/persona`;
     try{
@@ -51,7 +64,9 @@ export const PostPeople = async (inputs) => {
             headers: {"Content-type": "application/json; charset=UTF-8"}
             });
         const data = await response.json();
+        !response.ok ? alert(data.error) : alert(data.message);
         return data;
+        
     }catch(error){
         console.log(error);
     }
@@ -74,6 +89,26 @@ export const PutLibro = async ({edit,isbn}) => {
     }
 }
 
+
+export const PutPersonaLibro = async ({persona,isbn}) => {
+    const URL = `http://localhost:${API_PORT}/libro/${isbn}/personas`;
+    try{
+        const response = await fetch(URL, {
+            method: "PUT",
+            body: persona,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        console.log(data);
+        !response.ok || !data.success ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+
 export const PostLibro = async (inputs) => {
     const URL = `http://localhost:${API_PORT}/libro`;
     try{
@@ -90,6 +125,21 @@ export const PostLibro = async (inputs) => {
     }
 }
 
+export const PostPeopleLibro = async ({people,isbn}) => {
+    const URL = `http://localhost:${API_PORT}/libro/${isbn}/personas`;
+    try{
+        const response = await fetch(URL, {
+            method: "POST",
+            body: people,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        !response.ok ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
 
 export const PostPerson = async (inputs) => {
     try{
@@ -102,6 +152,30 @@ export const PostPerson = async (inputs) => {
         
         !response.ok ? alert(data.error) : alert(data.message);
         return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+export const DeletePersonFromBook = async ({isbn,id,type}) => {
+    const Content = JSON.stringify({
+        "id": id,
+        "tipo": type
+    }); 
+    
+
+    const URL = `http://localhost:${API_PORT}/libro/${isbn}/personas`;
+    try{
+        const response = await fetch(URL, {
+            method: "DELETE",
+            body: Content,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+       !response.ok ? alert(data.error) : alert(data.message);
+        return data;
+
     }catch(error){
         console.log(error);
     }

@@ -6,16 +6,16 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { PutLibro } from '../ApiHandler';
+import { PutLibro, GetLibro,PutPersonaLibro, DeletePersonFromBook,PostPeopleLibro,PostPeople} from '../ApiHandler';
 import Modal from 'react-bootstrap/Modal';
+import { v4 as uuidv4 } from 'uuid';
+import {ModalPersonaExistente,ModalNuevaPersona} from './NuevoLibro';
 
 
 
 
 
-
-
-export const ListaLibros = ({libros}) => {
+export const ListaLibros = ({libros,people}) => {
     const [filterText, setFilterText] = React.useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const [showModal, setModalShow] = React.useState(false);
@@ -51,6 +51,7 @@ export const ListaLibros = ({libros}) => {
         
 
     };
+   
 
 	return (
     <div className='container mt-3'>
@@ -65,41 +66,163 @@ export const ListaLibros = ({libros}) => {
 			subHeaderComponent={subHeaderComponentMemo}
 			persistTableHead
             expandableRows
-            expandableRowsComponent={ListaExpandible}
+            expandableRowsComponent={ListaExpandible(people)}
 			
 		/>
-        <ListaExpandible/>
+        
     </div>
 		
 	);
 }
 
-const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
-const ListaExpandible = () =>{
-    return(
-    <div className='container ml-3 mr-3'>
-      <Row>
-        <Col>
-            <h4>Autores</h4>
-            <ListGroup>
-                <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-            </ListGroup>
-        </Col>
-        <Col>
-            <h4>Ilustradores</h4>
-            <ListGroup>
-                <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-            </ListGroup>
-        </Col>
-      </Row>
-    </div>
-    );
+const ListaExpandible = (people) => ({ data }) => {
+    const [loading, setLoading] = React.useState(true);
+    const [libro, setLibro] = React.useState(null);
+    React.useEffect(() => {
+            fetchLibro();
+        }, [data.isbn]);
+    const fetchLibro = async () => {
+        try {
+            const libro = await GetLibro(data.isbn);
+            setLibro(libro);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
+        }
+    }
+
+    
+    const HandleExistentePush = (person) => {
+
+        const personPost = JSON.stringify({id:person.id,porcentaje:person.porcentaje,tipo:person.tipo});
+
+        PostPeopleLibro({people:personPost,isbn:data.isbn});
+
+        setLibro({...libro,ilustradores:[...libro.ilustradores,person]});
+    }
+    const HandleNuevoPush = async(person) => {
+        
+        const response = await PostPeople(person[1]);
+        PostPeopleLibro({people:JSON.stringify({id:response.data.id,porcentaje:person[1].porcentaje,tipo:person[0].tipo}),isbn:data.isbn});
+        person[1].id = response.data.id;
+        person[1].tipo = person[0].tipo;
+        setLibro({...libro,ilustradores:[...libro.ilustradores,person[1]]});
+        
+    }
+    const handlePorcentaje = async({porcentaje,id,tipo})=>{
+        const response = await PutPersonaLibro({persona:JSON.stringify({porcentaje:porcentaje,id:id,tipo:tipo}),isbn:data.isbn});
+        if(response.success) {
+            tipo == 0 ? setLibro({...libro,autores:libro.autores.map(autor => autor.id === id ? {...autor,porcentaje:porcentaje} : autor)}) : setLibro({...libro,ilustradores:libro.ilustradores.map(ilustrador => ilustrador.id === id ? {...ilustrador,porcentaje:porcentaje} : ilustrador)});
+        }
+
+
+    }
+    const handleDelete = ({isbn,id,type}) => {
+       
+        DeletePersonFromBook({isbn,id,type});
+        
+        type == 0 ? setLibro({...libro,autores:libro.autores.filter(autor => autor.id !== id)}) : setLibro({...libro,ilustradores:libro.ilustradores.filter(ilustrador => ilustrador.id !== id)});
+    }
+
+    if (loading) { 
+        return <div>Loading...</div>;
+    } else {
+        console.log(libro.isbn);
+        return (
+            <div className='container ml-3 mr-3'>
+                <Row>
+                    <Col>
+                            <div>
+                                <h4>Autores</h4>
+                                <ListGroup>
+                                    {libro.autores.map(autor => { console.log(autor);
+                                        return (
+                                            <ListGroup.Item key={autor.id}>
+                                                {autor.nombre}
+                                                {' '}
+                                                {autor.porcentaje}%
+                                                <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleDelete({isbn:data.isbn,id:autor.id,type:0})}/>
+                                                <ModalEidt handlePorcentaje={handlePorcentaje} porcentajeInicial={autor.porcentaje} id={autor.id} tipo={0}/>
+                                            </ListGroup.Item>
+                                            
+                                        );
+                                    })}
+                                    <ListGroup.Item>
+                                        <ModalPersonaExistente options={people} onSave={HandleExistentePush} type="Autor"/>{' '}
+                                        <ModalNuevaPersona type="Autor" setPerson={HandleNuevoPush} person={[{tipo:0}]}/>
+                                    </ListGroup.Item>
+                                </ListGroup>
+                            </div>
+                        
+                    </Col>
+                    <Col>
+                        <h4>Ilustradores</h4>
+                        <ListGroup>
+                            {libro.ilustradores.map(ilustrador => {
+                                return (
+                                    <ListGroup.Item key={ilustrador.id}>
+                                        {ilustrador.nombre}
+                                        {' '}
+                                        {ilustrador.porcentaje}%
+                                        <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleDelete({isbn:data.isbn,id:ilustrador.id,type:1})}/>
+                                        <ModalEidt handlePorcentaje={handlePorcentaje} porcentajeInicial={ilustrador.porcentaje} id={ilustrador.id} tipo={1}/>
+                                    </ListGroup.Item>
+
+                                );
+                            })}
+                            <ListGroup.Item>
+                                <ModalPersonaExistente options={people} onSave={HandleExistentePush} type="Ilustrador"/>{' '}
+                                <ModalNuevaPersona type="Ilustrador" setPerson={HandleNuevoPush} person={[{tipo:1}]}/>
+                            </ListGroup.Item>
+
+                        </ListGroup>
+                    </Col>
+                </Row>
+            </div>
+        );
+    }
 }
+
+
+const ModalEidt = ({handlePorcentaje,porcentajeInicial,id,tipo}) => {
+    const [show, setShow] = React.useState(false);
+    const [porcentaje, setPorcentaje] = React.useState(0);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const onChange = (e) => {
+        setPorcentaje(parseInt(e.target.value));
+    }
+    return (
+        <>
+            <button className="btn btn-outline btn-xs" onClick={handleShow}>✏️</button>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Cambiar porcentaje</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Porcentaje</Form.Label>
+                            <Form.Control type="number" placeholder="Porcentaje" defaultValue={porcentajeInicial} onChange={onChange}/>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cerrar
+                    </Button>
+                    <Button variant="primary" onClick={() => handlePorcentaje({porcentaje:porcentaje,id:id,tipo:tipo})}>
+                        Enviar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>);
+}
+
+
+
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
     

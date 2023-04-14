@@ -6,9 +6,10 @@ import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
 import { useState,useEffect,React } from "react";
 import { PostLibro } from '../ApiHandler';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 
-const ModalNuevaPersona = ({type,setPerson,person}) => {
+export const ModalNuevaPersona = ({type,setPerson,person}) => {
     const [show, setShow] = useState(false);
   
     const handleClose = () => setShow(false);
@@ -19,8 +20,9 @@ const ModalNuevaPersona = ({type,setPerson,person}) => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        const value = name === "dni" ? parseInt(event.target.value) : event.target.value;
+        const value = name === "dni"||name === "porcentaje" ? parseInt(event.target.value) : event.target.value;
         setInputs(values => ({...values, [name]: value}))
+        
     }
 
     const handleSubmit = async (event) => {
@@ -28,6 +30,7 @@ const ModalNuevaPersona = ({type,setPerson,person}) => {
         setPerson([...person,inputs]);
         handleClose();
         setInputs({});
+        console.log(inputs);
     }
   
     return (
@@ -47,7 +50,9 @@ const ModalNuevaPersona = ({type,setPerson,person}) => {
                 <Form.Label>Email</Form.Label>                                      
                 <Form.Control className="mb-3" name="email" placeholder="Email" value={inputs.email || ""} onChange={handleChange}/>
                 <Form.Label>DNI</Form.Label>                                     
-                <Form.Control className="mb-3" type="number" max="99999999" name="dni" placeholder="DNI" value={inputs.dni} onChange={handleChange}/>                     
+                <Form.Control className="mb-3" type="number" max="99999999" name="dni" placeholder="DNI" value={inputs.dni} onChange={handleChange}/>
+                <Form.Label>Porcentaje</Form.Label>
+                <Form.Control className="mb-3" type="number" min="0" max="100" name="porcentaje" defaultValue={0} value={inputs.porcentaje} onChange={handleChange}/>                    
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -64,13 +69,14 @@ const ModalNuevaPersona = ({type,setPerson,person}) => {
 }
 
 
-function ModalPersonaExistente({ options, onSave,type }) {
+export function ModalPersonaExistente({ options, onSave,type }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   
   const [selectedOption, setSelectedOption] = useState(-1);
+  const [selectedPorcentaje, setSelectedPorcentaje] = useState(0);
 
   const handleOpenClick = () => {
     setSelectedOption(options[0].id);
@@ -80,6 +86,10 @@ function ModalPersonaExistente({ options, onSave,type }) {
   const handleSaveClick = () => {
     if(selectedOption !== -1) {
     const option = options.find(option => option.id == selectedOption);
+    option.porcentaje = parseInt(selectedPorcentaje);
+    if (type === "Autor") option.tipo = 0;
+    else option.tipo = 1;
+
     onSave(option);
     }
     handleClose();
@@ -96,11 +106,30 @@ function ModalPersonaExistente({ options, onSave,type }) {
             <Modal.Title>{type} ya existente</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <select value={selectedOption} onChange={e => setSelectedOption(e.target.value)}>
-              {options.map(option => (
+            <Row>
+            <Col>
+             <Form.Select value={selectedOption} onChange={e => setSelectedOption(e.target.value)}>
+               {options.map(option => (
                 <option key={option.id} value={option.id}>{option.nombre}</option>
-              ))}
-            </select>
+               ))}
+              </Form.Select>
+            </Col>
+            <Col>
+              <InputGroup >
+                <Form.Control
+                  type='number'
+                  size="4" 
+                  min="0"
+                  max="100"
+                  placeholder="Porcentaje"
+                  name="porcentaje"
+                  value={selectedPorcentaje}
+                  onChange={e => setSelectedPorcentaje(e.target.value)}          
+                />
+                <InputGroup.Text id="basic-addon2">%</InputGroup.Text>
+             </InputGroup>
+            </Col>
+            </Row>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -114,6 +143,7 @@ function ModalPersonaExistente({ options, onSave,type }) {
     </>
   );
 }
+
 
 
 
@@ -174,8 +204,8 @@ export const NuevoLibro = ({personas}) => {
 
     const handleSubmit = async (event) => {
       event.preventDefault();
-      const listaAutores = autores.concat(selectedAuthors.map(item => ({id: item.id})));
-      const listaIlustradores = ilustradores.concat(selectedIlustrators.map(item => ({id: item.id})));
+      const listaAutores = autores.concat(selectedAuthors.map(item => ({id: item.id, porcentaje: item.porcentaje})));
+      const listaIlustradores = ilustradores.concat(selectedIlustrators.map(item => ({id: item.id, porcentaje: item.porcentaje})));
       const libro =JSON.stringify({
         titulo: event.target.titulo.value,
         isbn: event.target.isbn.value,
@@ -186,6 +216,12 @@ export const NuevoLibro = ({personas}) => {
         ilustradores: listaIlustradores,
       });
       PostLibro(libro);
+      event.target.reset();
+      setAutores([]);
+      setIlustradores([]);
+      setSelectedAuthors([]);
+      setSelectedIlustrators([]);
+
       
     }
   

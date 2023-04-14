@@ -55,15 +55,23 @@ function App() {
     );
   }
   const ListarLibros = () => {
+    const [personas,setPersonas] = useState([]);
+
+    const fetchPersonas = async () => {
+      const data = await GetPersonas();
+      setPersonas(data);
+      console.log(data);
+    }
+
     const [libros,setLibros] = useState([]);
     const fetchLibros = async () => {
       const data = await GetLibros();
       setLibros(data);
       console.log(data);
     }
-    useEffect(() => {fetchLibros()},[]);
+    useEffect(() => {fetchLibros();fetchPersonas();},[]);
     return(
-      <ListaLibros libros={libros}/>
+      <ListaLibros libros={libros} people={personas}/>
     );
   }
 
