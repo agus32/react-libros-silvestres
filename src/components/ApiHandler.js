@@ -89,6 +89,38 @@ export const PutLibro = async ({edit,isbn}) => {
     }
 }
 
+export const PutCliente = async ({edit,id}) => {
+    const URL = `http://localhost:${API_PORT}/cliente/${id}`;
+    try{
+        const response = await fetch(URL, {
+            method: "PUT",
+            body: edit,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        console.log(data);
+        !response.ok || !data.success ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const DeleteCliente = async (id) => {
+    const URL = `http://localhost:${API_PORT}/cliente/${id}`;
+    try{
+        const response = await fetch(URL, {
+            method: "DELETE",
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        console.log(data);
+        !response.ok ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
 
 export const PutPersonaLibro = async ({persona,isbn}) => {
     const URL = `http://localhost:${API_PORT}/libro/${isbn}/personas`;
@@ -157,6 +189,23 @@ export const PostPerson = async (inputs) => {
     }
 }
 
+export const PostCliente = async (inputs) => {
+    try{
+        const response = await fetch(`http://localhost:${API_PORT}/cliente`, {
+            method: "POST",
+            body: inputs,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        !response.ok ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+
+}
+
+
 
 export const DeletePersonFromBook = async ({isbn,id,type}) => {
     const Content = JSON.stringify({
@@ -176,6 +225,18 @@ export const DeletePersonFromBook = async ({isbn,id,type}) => {
        !response.ok ? alert(data.error) : alert(data.message);
         return data;
 
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+export const GetClientes = async () => {
+    const URL = `http://localhost:${API_PORT}/cliente`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
     }catch(error){
         console.log(error);
     }

@@ -1,11 +1,12 @@
 import { NavBar } from './components/NavBar';
 import './App.css';
-import { GetPersonas, GetPeople, GetLibros } from './components/ApiHandler';
+import { GetPersonas, GetPeople, GetLibros, GetClientes} from './components/ApiHandler';
 import { useEffect,React,useState } from 'react';
 import { DataPersonTable } from './components/personas/DataTable';
 import { Route, Routes } from 'react-router-dom';
 import { NuevoLibro } from './components/libros/NuevoLibro';
 import { ListaLibros } from './components/libros/ListaLibros';
+import { Clientes } from './components/ventas/Clientes';
 
 
 function App() {
@@ -91,6 +92,21 @@ function App() {
     );
   }
 
+  const ShowClientes = () => {
+    const [clientes,setClientes] = useState([]);
+
+    const fetchClientes = async () => {
+      const data = await GetClientes();
+      setClientes(data);
+      console.log(data);
+    }
+    useEffect(() => {fetchClientes()},[]);
+    return(
+      <Clientes clientes={clientes} setClientes={setClientes}/>
+    );
+  }
+
+
 
 
   return (
@@ -101,6 +117,7 @@ function App() {
         <Route path="/lista-libros" element={<ListarLibros/>}/>
         <Route path="/nuevo-libro" element={<CrearLibro/>}/>
         <Route path="/ventas" element={<h1>a</h1>}/>
+        <Route path="/clientes" element={<ShowClientes/>}/>
         <Route path="/autores" element={<Autores/>}/>
         <Route path="/ilustradores" element={<Ilustradores/>}/>
       </Routes>

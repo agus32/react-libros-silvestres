@@ -16,7 +16,10 @@ export const NavBar = () => {
                   <NavDropdown.Item href="nuevo-libro">Nuevo Libro</NavDropdown.Item>
                   <NavDropdown.Item href="lista-libros">Lista de Libros</NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link href="ventas">Ventas</Nav.Link>
+                <NavDropdown title="Ventas" id="collasible-nav-dropdown">
+                  <NavDropdown.Item href="ventas">Ventas</NavDropdown.Item>
+                  <NavDropdown.Item href="clientes">Clientes</NavDropdown.Item>
+                </NavDropdown>
                 <Nav.Link href="autores">Autores</Nav.Link>
                 <Nav.Link href="ilustradores">Ilustradores</Nav.Link>
               </Nav>

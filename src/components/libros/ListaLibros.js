@@ -144,7 +144,7 @@ const ListaExpandible = (people) => ({ data }) => {
                                                 {' '}
                                                 {autor.porcentaje}%
                                                 <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleDelete({isbn:data.isbn,id:autor.id,type:0})}/>
-                                                <ModalEidt handlePorcentaje={handlePorcentaje} porcentajeInicial={autor.porcentaje} id={autor.id} tipo={0}/>
+                                                <ModalEdit handlePorcentaje={handlePorcentaje} porcentajeInicial={autor.porcentaje} id={autor.id} tipo={0}/>
                                             </ListGroup.Item>
                                             
                                         );
@@ -167,7 +167,7 @@ const ListaExpandible = (people) => ({ data }) => {
                                         {' '}
                                         {ilustrador.porcentaje}%
                                         <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleDelete({isbn:data.isbn,id:ilustrador.id,type:1})}/>
-                                        <ModalEidt handlePorcentaje={handlePorcentaje} porcentajeInicial={ilustrador.porcentaje} id={ilustrador.id} tipo={1}/>
+                                        <ModalEdit handlePorcentaje={handlePorcentaje} porcentajeInicial={ilustrador.porcentaje} id={ilustrador.id} tipo={1}/>
                                     </ListGroup.Item>
 
                                 );
@@ -186,7 +186,7 @@ const ListaExpandible = (people) => ({ data }) => {
 }
 
 
-const ModalEidt = ({handlePorcentaje,porcentajeInicial,id,tipo}) => {
+const ModalEdit = ({handlePorcentaje,porcentajeInicial,id,tipo}) => {
     const [show, setShow] = React.useState(false);
     const [porcentaje, setPorcentaje] = React.useState(0);
     const handleClose = () => setShow(false);
