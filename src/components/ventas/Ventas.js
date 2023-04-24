@@ -1,190 +1,12 @@
-import {Button, Col, Row, Form} from 'react-bootstrap';
+import {Button, Col, Row, Form,Table,InputGroup} from 'react-bootstrap';
 import React from 'react';
+import { PostVenta,GetVentaById} from '../ApiHandler';
+import { formatDate } from '../libros/ListaLibros';
+import DataTable from 'react-data-table-component';
 
 
-const libros = [
-    {
-      "titulo": "el aleph 4",
-      "isbn": "007",
-      "fecha_edicion": "2023-08-04T03:00:00.000Z",
-      "precio": 1.01,
-      "stock": 2
-    },
-    {
-      "titulo": "corazon de seda",
-      "isbn": "12223111",
-      "fecha_edicion": "2023-04-15T03:00:00.000Z",
-      "precio": 1293,
-      "stock": 2
-    },
-    {
-      "titulo": "as de picas",
-      "isbn": "123123",
-      "fecha_edicion": "2377-02-12T03:00:00.000Z",
-      "precio": 123.33,
-      "stock": 30
-    },
-    {
-      "titulo": "assdas",
-      "isbn": "123123123",
-      "fecha_edicion": "2377-02-12T03:00:00.000Z",
-      "precio": 123.33,
-      "stock": 34
-    },
-    {
-      "titulo": "hamlet",
-      "isbn": "1233",
-      "fecha_edicion": "2022-03-22T03:00:00.000Z",
-      "precio": 100.5,
-      "stock": 37
-    },
-    {
-      "titulo": "futbol total 3",
-      "isbn": "123312",
-      "fecha_edicion": "2002-02-02T03:00:00.000Z",
-      "precio": 123.2,
-      "stock": 0
-    },
-    {
-      "titulo": "el aleph",
-      "isbn": "1233221",
-      "fecha_edicion": "2021-04-01T03:00:00.000Z",
-      "precio": 2333.12,
-      "stock": 17
-    },
-    {
-      "titulo": "futbol total",
-      "isbn": "213122",
-      "fecha_edicion": "2002-02-02T03:00:00.000Z",
-      "precio": 123.2,
-      "stock": 2
-    },
-    {
-      "titulo": "futbol total",
-      "isbn": "21312221",
-      "fecha_edicion": "2002-02-02T03:00:00.000Z",
-      "precio": 123.2,
-      "stock": 2
-    },
-    {
-      "titulo": "asd",
-      "isbn": "22",
-      "fecha_edicion": "2023-04-10T03:00:00.000Z",
-      "precio": 123,
-      "stock": 2
-    },
-    {
-      "titulo": "reeerw",
-      "isbn": "234",
-      "fecha_edicion": "2023-04-13T03:00:00.000Z",
-      "precio": 234,
-      "stock": 234
-    },
-    {
-      "titulo": "Breviario",
-      "isbn": "9876543212",
-      "fecha_edicion": "2023-01-02T03:00:00.000Z",
-      "precio": 4500,
-      "stock": 0
-    },
-    {
-      "titulo": "Breviario 2 la secuela",
-      "isbn": "9876543213",
-      "fecha_edicion": "2023-01-02T03:00:00.000Z",
-      "precio": 4500,
-      "stock": 0
-    },
-    {
-      "titulo": "Breviario 3",
-      "isbn": "9876543218",
-      "fecha_edicion": "2023-01-02T03:00:00.000Z",
-      "precio": 4500,
-      "stock": 0
-    }
-  ];
 
-const ClientArray = [
-    {
-      "id": 2,
-      "nombre": "Agronomia pampa",
-      "email": "Agronomia@gmail.com",
-      "cuit": "30711245355",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "AGRONOMIA PAMPA S.R.L.",
-      "domicilio": "RUTA 11 1522 - SAN JUSTO SANTA FE"
-    },
-    {
-      "id": 3,
-      "nombre": "Agricola",
-      "email": "Agricola@gmail.com",
-      "cuit": "30711242933",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "AGRICOLA CARLOS KEEN SA",
-      "domicilio": "ALVEAR MARCELO T. DE 684 Piso:1 Dpto:A - CAPITAL FEDERAL CIUDAD AUTONOMA BUENOS AIRES"
-    },
-    {
-      "id": 6,
-      "nombre": "Libreria",
-      "email": "libreria3@gmail.com",
-      "cuit": "30708889802",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "LIBRERIA COMIENZOS S.R.L.",
-      "domicilio": "PROVINCIAS UNIDAS 684 - ROSARIO SUD SANTA FE"
-    },
-    {
-      "id": 7,
-      "nombre": "pescaderia",
-      "email": "pescaderia@gmail.com",
-      "cuit": "30714217557",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "",
-      "domicilio": ""
-    },
-    {
-      "id": 8,
-      "nombre": "pescaderia 2",
-      "email": "pescaderia@gmail.com",
-      "cuit": "30715605917",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "",
-      "domicilio": ""
-    },
-    {
-      "id": 9,
-      "nombre": "Carniceria",
-      "email": "carne@gmail.com",
-      "cuit": "30715050478",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "",
-      "domicilio": ""
-    },
-    {
-      "id": 10,
-      "nombre": "Carniceria 2",
-      "email": "carne@gmail.com",
-      "cuit": "30667180062",
-      "tipo": 1,
-      "cond_fiscal": "",
-      "razon_social": "CARNICERIA ARMENDARIZ SRL",
-      "domicilio": "PELLEGRINI 686 - SAN PEDRO BUENOS AIRES"
-    }
-  ];
-
-  const medio_pago = [
-    "efectivo",
-    "debito",
-    "credito",
-    "mercadopago",
-    "transferencia"
-  ];
-
-const AltaVenta = () =>{
+const AltaVenta = ({Clientes,medioPago,libros}) =>{
 const [librosSeleccionados, setLibrosSeleccionados] = React.useState([]);
 const [inputs, setInputs] = React.useState({libro: "", cantidad: ""});
 
@@ -227,7 +49,7 @@ const handleSeleccionadoAdd = (event) => {
           libros: listaLibros
         });
         console.log(venta);
-       // PostVenta(venta);
+        PostVenta(venta);
         event.target.reset();
         setLibrosSeleccionados([]);
       }
@@ -241,7 +63,7 @@ const handleSeleccionadoAdd = (event) => {
       <Form.Group as={Col} controlId="cliente">
           <Form.Label>Cliente</Form.Label>
           <Form.Select>
-            {ClientArray.map((client) => (
+            {Clientes.map((client) => (
                 <option key={client.id} value={client.id}>{client.nombre}</option>
             ))}
           </Form.Select>
@@ -254,7 +76,7 @@ const handleSeleccionadoAdd = (event) => {
         <Form.Group as={Col} controlId="medio_pago">
           <Form.Label>Medio de Pago</Form.Label>
           <Form.Select defaultValue="Choose...">
-            {medio_pago.map((medio,index) => (
+            {medioPago.map((medio,index) => (
                 <option key={index} value={index}>{medio}</option>
             ))}
           </Form.Select>
@@ -306,11 +128,170 @@ const handleSeleccionadoAdd = (event) => {
   );
 }
 
-export const Ventas = () => {
+export const Ventas = ({Clientes,medioPago,libros,ventas}) => {
     return (
         <div className='container mt-3'>
             <h2>Nueva venta</h2>
-            <AltaVenta/>
+            <AltaVenta Clientes={Clientes} medioPago={medioPago} libros={libros}/>
+            <ListaVentas ventas={ventas} medioDePago={medioPago}/>
+
           </div>
     );
 }
+
+const ListaVentas = ({ventas,medioDePago}) => {
+
+  const [filterText, setFilterText] = React.useState('');
+	const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+
+	
+	const filteredItems = ventas.filter(
+		item => item.nombre_cliente && item.nombre_cliente.toLowerCase().includes(filterText.toLowerCase()),
+	);
+    
+    
+
+	const subHeaderComponentMemo = React.useMemo(() => {
+		const handleClear = () => {
+			if (filterText) {
+				setResetPaginationToggle(!resetPaginationToggle);
+				setFilterText('');
+			}
+		};
+
+		return (
+			<FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+		);
+	}, [filterText, resetPaginationToggle]);
+
+
+
+	return (
+    <div className='container mt-1'>
+      <DataTable
+			title="Ventas"
+			columns={columns(medioDePago)}
+			data={filteredItems}
+			pagination
+			paginationResetDefaultPage={resetPaginationToggle}
+			subHeader
+			subHeaderComponent={subHeaderComponentMemo}
+			persistTableHead
+      expandableRows
+      expandableRowsComponent={ExpandedComponent}
+			
+		/>
+    </div>
+		
+	);
+}
+
+
+
+const columns =(medioDePago) =>([
+    {
+        name: 'ID',
+        selector: row => row.id,
+        sortable: true,
+    },
+    {
+        name: 'Nombre Cliente',
+        selector: row => row.nombre_cliente,
+        sortable: true,
+    },
+    {
+      name: 'Cuit',
+      selector: row => row.cuit,
+      sortable: true,
+    },
+    {
+        name: 'Medio de pago',
+        selector: row => medioDePago[row.medio_pago],
+        sortable: true,
+    },
+    {
+        name: 'Fecha',
+        selector: row => formatDate(row.fecha),
+        sortable: false,
+    },
+    {
+      name: 'Total',
+      selector: row => row.total,
+      sortable: true,
+  }
+
+]);
+
+const ExpandedComponent = ({ data }) => {
+  const [loading, setLoading] = React.useState(true);
+  const [ventas, setVentas] = React.useState(null);
+
+  React.useEffect(() => {
+          fetchVentas();
+      }, [data.id]);
+
+  const fetchVentas = async () => {
+      try {
+          const venta = await GetVentaById(data.id);
+          setVentas(venta);
+          console.log(venta);
+          setLoading(false);
+      } catch (error) {
+          console.error(error);
+          setLoading(false);
+      }
+  };
+  
+
+
+  if(loading){
+      return <p>Loading...</p>
+  }
+  else{
+  return (
+      <div className="container">
+      <Table striped bordered hover size="sm">
+      <thead>
+          <tr>
+          <th>ISBN</th>
+          <th>Titulo</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          </tr>
+      </thead>
+      <tbody>
+          {ventas.libros.map(fila=>(
+              <tr key={fila.isbn}>
+              <td>{fila.isbn}</td>
+              <td>{fila.titulo}</td>
+              <td>{fila.cantidad}</td>
+              <td>{fila.precio_venta}</td>
+              </tr>
+          )
+          )}
+          
+      </tbody>
+      </Table>
+      </div>
+  );
+  }
+}
+
+
+
+
+
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
+    
+  <InputGroup>
+      <Form.Control 
+          id="search"
+          type="text"
+          placeholder="Buscar por cliente..."
+          value={filterText}
+          onChange={onFilter} />
+      <Button variant="outline-secondary" onClick={onClear}>x</Button>
+  </InputGroup>
+  
+
+);

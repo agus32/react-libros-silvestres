@@ -1,6 +1,6 @@
 import { NavBar } from './components/NavBar';
 import './App.css';
-import { GetPersonas, GetPeople, GetLibros, GetClientes} from './components/ApiHandler';
+import { GetPersonas, GetPeople, GetLibros, GetClientes,GetMedioPago,GetAllVentas} from './components/ApiHandler';
 import { useEffect,React,useState } from 'react';
 import { DataPersonTable } from './components/personas/DataTable';
 import { Route, Routes } from 'react-router-dom';
@@ -73,7 +73,7 @@ function App() {
     }
     useEffect(() => {fetchLibros();fetchPersonas();},[]);
     return(
-      <ListaLibros libros={libros} people={personas}/>
+      <ListaLibros libros={libros} people={personas} setLibros={setLibros}/>
     );
   }
 
@@ -108,9 +108,38 @@ function App() {
   }
 
   const ShowVentas = () => {
+    const [clientes,setClientes] = useState([]);
+    const fetchClientes = async () => {
+      const data = await GetClientes();
+      setClientes(data);
+      console.log(data);
+    }
+
+    const [libros,setLibros] = useState([]);
+    const fetchLibros = async () => {
+      const data = await GetLibros();
+      setLibros(data);
+      console.log(data);
+    }
+
+    const[medioPago,setMedioPago] = useState([]);
+    const fetchMedioPago = async () => {
+      const data = await GetMedioPago();
+      setMedioPago(data);
+      console.log(data);
+    }
+    const[ventas,setVentas] = useState([]);
+    const fetchVentas = async () => {
+      const data = await GetAllVentas();
+      setVentas(data);
+      console.log(data);
+    }
+
+
+    useEffect(() => {fetchClientes();fetchLibros();fetchMedioPago();fetchVentas();},[]);
    
     return(
-      <Ventas/>
+      <Ventas Clientes={clientes} libros={libros} medioPago={medioPago} ventas={ventas}/>
     );
   }
 

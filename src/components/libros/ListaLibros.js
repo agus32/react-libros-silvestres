@@ -15,7 +15,7 @@ import {ModalPersonaExistente,ModalNuevaPersona} from './NuevoLibro';
 
 
 
-export const ListaLibros = ({libros,people}) => {
+export const ListaLibros = ({libros,people,setLibros}) => {
     const [filterText, setFilterText] = React.useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const [showModal, setModalShow] = React.useState(false);
@@ -55,7 +55,7 @@ export const ListaLibros = ({libros,people}) => {
 
 	return (
     <div className='container mt-3'>
-      <ModalEditLibro show={showModal} setShow={setModalShow} libro={libroEdit}/>
+      <ModalEditLibro show={showModal} setShow={setModalShow} libro={libroEdit} libros={libros} setLibros={setLibros}/>
       <DataTable
 			title="Libros"
 			columns={columns(handleButtonClick)}
@@ -296,7 +296,7 @@ export function formatDate(dateString) {
   }
 
 
-const ModalEditLibro = ({libro,show,setShow}) => {
+const ModalEditLibro = ({libro,show,setShow,setLibros,libros}) => {
     const isbn = libro.isbn;
     const handleClose = () => setShow(false);
     const [fechaDefault, setFechaDefault] = React.useState("");
@@ -311,7 +311,22 @@ const ModalEditLibro = ({libro,show,setShow}) => {
             stock: parseInt(event.target.stock.value)
           });
         handleClose();
-        PutLibro({edit,isbn});
+        const response = await PutLibro({edit,isbn});
+        console.log(response);
+        if(response.success) {
+            
+           const aux = libros.map((libro) => {
+                if(libro.isbn === isbn) {
+                    libro.titulo = event.target.titulo.value;
+                    libro.fecha_edicion = event.target["fecha-edicion"].value;
+                    libro.precio = parseFloat(event.target.precio.value);
+                    libro.stock = parseInt(event.target.stock.value);
+                }
+                return libro;
+            });
+            setLibros(aux);
+            
+        }else alert("Error al editar libro");
 
 
     }

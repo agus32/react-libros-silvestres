@@ -55,6 +55,19 @@ export const GetLibro = async (isbn) => {
     }
 }
 
+export const GetMedioPago = async () => {
+
+    
+    const URL = `http://localhost:${API_PORT}/venta/medios_pago`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
 export const PostPeople = async (inputs) => {
     const URL = `http://localhost:${API_PORT}/persona`;
     try{
@@ -153,11 +166,53 @@ export const GetVentas = async (id) => {
     }
 }
 
+export const GetAllVentas = async () => {
+
+    
+    const URL = `http://localhost:${API_PORT}/venta`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
 export const GetVentaById = async (id) => {
     const URL = `http://localhost:${API_PORT}/venta/${id}`;
     try{
         const response = await fetch(URL);
         const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const GetStockById = async (id) => {
+    const URL = `http://localhost:${API_PORT}/cliente/${id}/stock`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+export const PostVenta = async (inputs) => {
+    const URL = `http://localhost:${API_PORT}/venta`;
+    try{
+        const response = await fetch(URL, {
+            method: "POST",
+            body: inputs,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        !response.ok ? alert(data.error) : alert(data.message);
         return data;
     }catch(error){
         console.log(error);

@@ -1,6 +1,6 @@
 import React from "react";
 import DataTable from 'react-data-table-component';
-import { DeleteCliente, PutCliente, PostCliente,GetVentas,GetVentaById} from '../ApiHandler';
+import { DeleteCliente, PutCliente, PostCliente,GetVentas,GetVentaById,GetStockById} from '../ApiHandler';
 import { Modal, Button, Form , InputGroup,Row,Col,Table} from 'react-bootstrap';
 import { formatDate } from "../libros/ListaLibros";
 import { v4 as uuidv4 } from 'uuid';
@@ -126,8 +126,7 @@ const ModalEditarClientes = ({cliente,setClientes,show,setShow,clientes}) => {
         event.preventDefault();
         const edit =JSON.stringify({
             nombre: event.target.nombre.value,
-            email: event.target.email.value,
-            cuit: event.target.cuit.value
+            email: event.target.email.value
           });
         handleClose();
         const response = await PutCliente({edit,id});
@@ -140,7 +139,7 @@ const ModalEditarClientes = ({cliente,setClientes,show,setShow,clientes}) => {
                 }
                 return item;
             });
-            
+            setClientes(aux);
             console.log(aux);
         } 
 
@@ -220,6 +219,7 @@ const AltaClienteForm = ({setClientes,clientes}) => {
 const ExpandedComponent = ({ data }) => {
     const [loading, setLoading] = React.useState(true);
     const [ventas, setVentas] = React.useState(null);
+    const [stock, setStock] = React.useState(null);
 
     React.useEffect(() => {
             fetchVentas();
@@ -232,7 +232,8 @@ const ExpandedComponent = ({ data }) => {
                 return await GetVentaById(vent.id);
             })
             const results = await Promise.all(promises);
-            
+            const response = await GetStockById(data.id);   
+            setStock(response);
             setVentas(results);
             setLoading(false);
             console.log(results);
@@ -241,20 +242,8 @@ const ExpandedComponent = ({ data }) => {
             setLoading(false);
         }
     };
-    
 
-    const stock = [
-        {
-          "titulo": "Dama de corazones",
-          "isbn": "97898712345",
-          "stock": 8
-        },
-        {
-          "titulo": "Breviario",
-          "isbn": "98765432100",
-          "stock": 3
-        }
-      ]
+
 
     if(loading){
         return <p>Loading...</p>
