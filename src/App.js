@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import { NuevoLibro } from './components/libros/NuevoLibro';
 import { ListaLibros } from './components/libros/ListaLibros';
 import { Clientes } from './components/ventas/Clientes';
+import { Ventas } from './components/ventas/Ventas';
 
 
 function App() {
@@ -106,6 +107,13 @@ function App() {
     );
   }
 
+  const ShowVentas = () => {
+   
+    return(
+      <Ventas/>
+    );
+  }
+
 
 
 
@@ -116,7 +124,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/lista-libros" element={<ListarLibros/>}/>
         <Route path="/nuevo-libro" element={<CrearLibro/>}/>
-        <Route path="/ventas" element={<h1>a</h1>}/>
+        <Route path="/ventas" element={<ShowVentas/>}/>
         <Route path="/clientes" element={<ShowClientes/>}/>
         <Route path="/autores" element={<Autores/>}/>
         <Route path="/ilustradores" element={<Ilustradores/>}/>

@@ -140,6 +140,32 @@ export const PutPersonaLibro = async ({persona,isbn}) => {
 }
 
 
+export const GetVentas = async (id) => {
+
+    
+    const URL = `http://localhost:${API_PORT}/cliente/${id}/ventas`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export const GetVentaById = async (id) => {
+    const URL = `http://localhost:${API_PORT}/venta/${id}`;
+    try{
+        const response = await fetch(URL);
+        const data = await response.json();
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+
 
 export const PostLibro = async (inputs) => {
     const URL = `http://localhost:${API_PORT}/libro`;

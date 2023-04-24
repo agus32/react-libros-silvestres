@@ -1,8 +1,9 @@
 import React from "react";
 import DataTable from 'react-data-table-component';
-import { DeleteCliente, PutCliente, PostCliente} from '../ApiHandler';
+import { DeleteCliente, PutCliente, PostCliente,GetVentas,GetVentaById} from '../ApiHandler';
 import { Modal, Button, Form , InputGroup,Row,Col,Table} from 'react-bootstrap';
-
+import { formatDate } from "../libros/ListaLibros";
+import { v4 as uuidv4 } from 'uuid';
 
 export const Clientes = ({clientes,setClientes}) => {
     const [filterText, setFilterText] = React.useState('');
@@ -60,7 +61,7 @@ export const Clientes = ({clientes,setClientes}) => {
 			subHeaderComponent={subHeaderComponentMemo}
 			persistTableHead
             expandableRows
-            expandableRowsComponent={<p>hola</p>}
+            expandableRowsComponent={ExpandedComponent}
 			
 		/>
         
@@ -139,6 +140,7 @@ const ModalEditarClientes = ({cliente,setClientes,show,setShow,clientes}) => {
                 }
                 return item;
             });
+            
             console.log(aux);
         } 
 
@@ -216,43 +218,119 @@ const AltaClienteForm = ({setClientes,clientes}) => {
         
 
 const ExpandedComponent = ({ data }) => {
-    //fetch data.id ventas
+    const [loading, setLoading] = React.useState(true);
+    const [ventas, setVentas] = React.useState(null);
 
-    //listar ventas
+    React.useEffect(() => {
+            fetchVentas();
+        }, [data.id]);
 
-    const response=[{},{},{}]
+    const fetchVentas = async () => {
+        try {
+            const venta = await GetVentas(data.id);
+            const promises = venta.map(async (vent) => {
+                return await GetVentaById(vent.id);
+            })
+            const results = await Promise.all(promises);
+            
+            setVentas(results);
+            setLoading(false);
+            console.log(results);
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
+        }
+    };
+    
+
+    const stock = [
+        {
+          "titulo": "Dama de corazones",
+          "isbn": "97898712345",
+          "stock": 8
+        },
+        {
+          "titulo": "Breviario",
+          "isbn": "98765432100",
+          "stock": 3
+        }
+      ]
+
+    if(loading){
+        return <p>Loading...</p>
+    }
+    else{
     return (
-        <Table striped bordered hover size="sm">
+        <div className="container">
+        <h4>Ventas</h4>
+        <Table bordered hover size="sm">
         <thead>
           <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th className="align-middle text-center">ID</th>
+            <th>Titulo</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Fecha</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </Table>
-    );
-}
+            
+        {ventas.map((venta, index) => (
+        <React.Fragment key={venta.id}>
+            {venta.libros.map((libro, libroIndex) => (
+            <tr key={`${index}-${libroIndex}`}>
+                {libroIndex === 0 && (
+                <>
+                    <td className="align-middle text-center" rowSpan={venta.libros.length}>{venta.id}</td>
+                    <td>{libro.titulo}</td>
+                    <td>{libro.cantidad}</td>
+                    <td>{libro.precio_venta}</td>
+                    <td className="align-middle" rowSpan={venta.libros.length}>{formatDate(venta.fecha)}</td>
+                    <td className="align-middle" rowSpan={venta.libros.length}>{venta.total}</td>
+                </>
+                )}
+                {libroIndex !== 0 && (
+                <>
+                    <td>{libro.titulo}</td>
+                    <td>{libro.cantidad}</td>
+                    <td>{libro.precio_venta}</td>
+                </>
+                )}
+            </tr>
+            ))}
+        </React.Fragment>
+        ))}
 
+
+
+        </tbody>
+        </Table>
+        <h4>Stock</h4>
+        <Table striped bordered hover size="sm">
+        <thead>
+            <tr>
+            <th>Titulo</th>
+            <th>ISBN</th>
+            <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {stock.map(fila=>(
+                <tr>
+                <td>{fila.titulo}</td>
+                <td>{fila.isbn}</td>
+                <td>{fila.stock}</td>
+                </tr>
+            )
+            )}
+            
+        </tbody>
+        </Table>
+        </div>
+    );
+    }
+}
 
 
 
