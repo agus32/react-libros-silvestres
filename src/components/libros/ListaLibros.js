@@ -65,7 +65,8 @@ export const ListaLibros = ({libros,people,setLibros}) => {
 			subHeaderComponent={subHeaderComponentMemo}
 			persistTableHead
             expandableRows
-            expandableRowsComponent={ListaExpandible(people)}
+            expandableRowsComponent={(props) => ExpandedComponent({ ...props, people })}
+             
 			
 		/>
         
@@ -75,7 +76,7 @@ export const ListaLibros = ({libros,people,setLibros}) => {
 }
 
 
-const ListaExpandible = (people) => ({ data }) => {
+const ExpandedComponent = ({ data,people }) => {
     const [loading, setLoading] = React.useState(true);
     const [libro, setLibro] = React.useState(null);
     React.useEffect(() => {
