@@ -67,7 +67,7 @@ export const DataPersonTable = ({data,setPeople,type}) => {
 				setToggleCleared(!toggleCleared);
 				setPeople(data.filter(r => !selectedRows.includes(r)));
         		selectedRows.map(r => DeletePerson(r.id));
-        		console.log(selectedRows);
+        		
 			}
 		};
 
@@ -76,7 +76,7 @@ export const DataPersonTable = ({data,setPeople,type}) => {
 				Delete
 			</Button>
 		);
-	}, [data, selectedRows, toggleCleared]);
+	}, [data, selectedRows, toggleCleared,setPeople]);
 
 	const subHeaderComponentMemo = React.useMemo(() => {
 		const handleClear = () => {

@@ -24,7 +24,6 @@ function App() {
     const fetchAuthors = async () => {
         const data = await GetPeople('autor');
         setAuthors(data);
-        console.log(data);
       }
 
     useEffect(() => {
@@ -45,7 +44,6 @@ function App() {
     const fetchIllustrators = async () => {
       const data = await GetPeople('ilustrador');
       setIllustrators(data);
-      console.log(data);
     }
 
     useEffect(() => {fetchIllustrators()},[]);
@@ -63,14 +61,14 @@ function App() {
     const fetchPersonas = async () => {
       const data = await GetPersonas();
       setPersonas(data);
-      console.log(data);
+      
     }
 
     const [libros,setLibros] = useState([]);
     const fetchLibros = async () => {
       const data = await GetLibros();
       setLibros(data);
-      console.log(data);
+      
     }
     useEffect(() => {fetchLibros();fetchPersonas();},[]);
     return(
@@ -85,7 +83,7 @@ function App() {
     const fetchPersonas = async () => {
       const data = await GetPersonas();
       setPersonas(data);
-      console.log(data);
+      
     }
     useEffect(() => {fetchPersonas()},[]);
 
@@ -100,7 +98,7 @@ function App() {
     const fetchClientes = async () => {
       const data = await GetClientes();
       setClientes(data);
-      console.log(data);
+      
     }
     useEffect(() => {fetchClientes()},[]);
     return(
@@ -113,27 +111,27 @@ function App() {
     const fetchClientes = async () => {
       const data = await GetClientes();
       setClientes(data);
-      console.log(data);
+      
     }
 
     const [libros,setLibros] = useState([]);
     const fetchLibros = async () => {
       const data = await GetLibros();
       setLibros(data);
-      console.log(data);
+      
     }
 
     const[medioPago,setMedioPago] = useState([]);
     const fetchMedioPago = async () => {
       const data = await GetMedioPago();
       setMedioPago(data);
-      console.log(data);
+      
     }
     const[ventas,setVentas] = useState([]);
     const fetchVentas = async () => {
       const data = await GetAllVentas();
       setVentas(data);
-      console.log(data);
+      
     }
 
 
@@ -150,14 +148,14 @@ function App() {
     const fetchClientes = async () => {
       const data = await GetClientes();
       setClientes(data);
-      console.log(data);
+      
     }
 
     const [libros,setLibros] = useState([]);
     const fetchLibros = async () => {
       const data = await GetLibros();
       setLibros(data);
-      console.log(data);
+      
     }
     useEffect(() => {fetchClientes();fetchLibros();},[]);
 

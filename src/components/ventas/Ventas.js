@@ -48,7 +48,7 @@ const handleSeleccionadoAdd = (event) => {
           medio_pago: parseInt(event.target.medio_pago.value),
           libros: listaLibros
         });
-        console.log(venta);
+        
         PostVenta(venta);
         event.target.reset();
         setLibrosSeleccionados([]);
@@ -234,7 +234,7 @@ const ExpandedComponent = ({ data }) => {
       try {
           const venta = await GetVentaById(data.id);
           setVentas(venta);
-          console.log(venta);
+          
           setLoading(false);
       } catch (error) {
           console.error(error);

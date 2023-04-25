@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { PutLibro, GetLibro,PutPersonaLibro, DeletePersonFromBook,PostPeopleLibro,PostPeople} from '../ApiHandler';
 import Modal from 'react-bootstrap/Modal';
-import { v4 as uuidv4 } from 'uuid';
 import {ModalPersonaExistente,ModalNuevaPersona} from './NuevoLibro';
 
 
@@ -45,7 +44,7 @@ export const ListaLibros = ({libros,people,setLibros}) => {
 
     const handleButtonClick = (e, isbn) => {
         e.preventDefault();
-        console.log("Row Id", isbn);
+        
         setLibroEdit(libros.find(libro => libro.isbn === isbn));
         setModalShow(true);
         
@@ -129,7 +128,7 @@ const ListaExpandible = (people) => ({ data }) => {
     if (loading) { 
         return <div>Loading...</div>;
     } else {
-        console.log(libro.isbn);
+        
         return (
             <div className='container ml-3 mr-3'>
                 <Row>
@@ -137,7 +136,7 @@ const ListaExpandible = (people) => ({ data }) => {
                             <div>
                                 <h4>Autores</h4>
                                 <ListGroup>
-                                    {libro.autores.map(autor => { console.log(autor);
+                                    {libro.autores.map(autor => { 
                                         return (
                                             <ListGroup.Item key={autor.id}>
                                                 {autor.nombre}
@@ -312,7 +311,7 @@ const ModalEditLibro = ({libro,show,setShow,setLibros,libros}) => {
           });
         handleClose();
         const response = await PutLibro({edit,isbn});
-        console.log(response);
+        
         if(response.success) {
             
            const aux = libros.map((libro) => {

@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component';
 import { DeleteCliente, PutCliente, PostCliente,GetVentas,GetVentaById,GetStockById} from '../ApiHandler';
 import { Modal, Button, Form , InputGroup,Row,Col,Table} from 'react-bootstrap';
 import { formatDate } from "../libros/ListaLibros";
-import { v4 as uuidv4 } from 'uuid';
+
 
 export const Clientes = ({clientes,setClientes}) => {
     const [filterText, setFilterText] = React.useState('');
@@ -140,7 +140,7 @@ const ModalEditarClientes = ({cliente,setClientes,show,setShow,clientes}) => {
                 return item;
             });
             setClientes(aux);
-            console.log(aux);
+            
         } 
 
     }
@@ -236,7 +236,7 @@ const ExpandedComponent = ({ data }) => {
             setStock(response);
             setVentas(results);
             setLoading(false);
-            console.log(results);
+            
         } catch (error) {
             console.error(error);
             setLoading(false);

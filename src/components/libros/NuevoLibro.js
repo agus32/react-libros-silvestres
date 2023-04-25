@@ -30,7 +30,7 @@ export const ModalNuevaPersona = ({type,setPerson,person}) => {
         setPerson([...person,inputs]);
         handleClose();
         setInputs({});
-        console.log(inputs);
+        
     }
   
     return (
@@ -264,14 +264,14 @@ export const NuevoLibro = ({personas}) => {
         <Form.Label>Autores</Form.Label>
         <div className="mb-3">
             {autores.map((autor) => (
-                <div>
-                    <span className="align-middle"key={autor.dni}>{autor.nombre}</span> 
+                <div key={autor.dni}>
+                    <span className="align-middle">{autor.nombre}</span> 
                     <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleAutorDelete({dni: autor.dni})}/>
                 </div>
             ))}
             {selectedAuthors.map((autor) => (
-              <div>
-                <span className="align-middle"key={autor.id}>{autor.nombre}</span>
+              <div key={autor.id}>
+                <span className="align-middle">{autor.nombre}</span>
                 <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleExistentesDelete({id: autor.id, type: "autor"})}/>
               </div>
             ))}
@@ -282,14 +282,14 @@ export const NuevoLibro = ({personas}) => {
         <Form.Label>Ilustradores</Form.Label>
         <div className="mb-3">
             {ilustradores.map((ilustrador) => (
-                <div>
-                    <span className="align-middle"key={ilustrador.dni}>{ilustrador.nombre}</span>
+                <div key={ilustrador.dni}>
+                    <span className="align-middle">{ilustrador.nombre}</span>
                     <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleIlustradorDelete({dni: ilustrador.dni})}/>
                 </div>
             ))}
             {selectedIlustrators.map((ilustrador) => (
-              <div>
-                <span className="align-middle"key={ilustrador.id}>{ilustrador.nombre}</span>
+              <div key={ilustrador.id}>
+                <span className="align-middle">{ilustrador.nombre}</span>
                 <button type="button" className="btn-close align-middle" aria-label="Close" onClick={() => handleExistentesDelete({id: ilustrador.id, type: "ilustrador"})}/>
               </div>
             ))}

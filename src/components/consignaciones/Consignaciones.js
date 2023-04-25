@@ -42,7 +42,7 @@ export const Consignaciones =({clientes,libros}) => {
               cliente: parseInt(event.target.cliente.value),
               libros: listaLibros
             });
-            console.log(consignacion);
+            
             PostConsignacion(consignacion);
             event.target.reset();
             setLibrosSeleccionados([]);
