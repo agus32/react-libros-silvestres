@@ -1,7 +1,6 @@
-
-
-const API_PORT = 3001;
-
+const API_PORT = process.env.REACT_APP_API_PORT;
+//const API_PORT = 3001;
+console.log("API_PORT", API_PORT);
 
 export const GetPeople = async (type) => {
     // type =  'autor' || 'ilustrador' ?tipo=${type}
