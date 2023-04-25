@@ -8,6 +8,7 @@ import { NuevoLibro } from './components/libros/NuevoLibro';
 import { ListaLibros } from './components/libros/ListaLibros';
 import { Clientes } from './components/ventas/Clientes';
 import { Ventas } from './components/ventas/Ventas';
+import {Consignaciones} from './components/consignaciones/Consignaciones';
 
 
 function App() {
@@ -144,6 +145,29 @@ function App() {
   }
 
 
+  const ShowConsignaciones = () => {
+    const [clientes,setClientes] = useState([]);
+    const fetchClientes = async () => {
+      const data = await GetClientes();
+      setClientes(data);
+      console.log(data);
+    }
+
+    const [libros,setLibros] = useState([]);
+    const fetchLibros = async () => {
+      const data = await GetLibros();
+      setLibros(data);
+      console.log(data);
+    }
+    useEffect(() => {fetchClientes();fetchLibros();},[]);
+
+
+
+    return(
+      <Consignaciones clientes={clientes} libros={libros}/>
+    );
+  }
+
 
 
   return (
@@ -157,6 +181,8 @@ function App() {
         <Route path="/clientes" element={<ShowClientes/>}/>
         <Route path="/autores" element={<Autores/>}/>
         <Route path="/ilustradores" element={<Ilustradores/>}/>
+        <Route path="/consignaciones" element={<ShowConsignaciones/>}/>
+        
       </Routes>
     </div>
   );

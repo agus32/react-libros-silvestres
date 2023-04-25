@@ -22,6 +22,7 @@ export const NavBar = () => {
                 </NavDropdown>
                 <Nav.Link href="autores">Autores</Nav.Link>
                 <Nav.Link href="ilustradores">Ilustradores</Nav.Link>
+                <Nav.Link href="consignaciones">Consignaciones</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>

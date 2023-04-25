@@ -295,7 +295,7 @@ const ExpandedComponent = ({ data }) => {
 
         </tbody>
         </Table>
-        <h4>Stock</h4>
+        <h4>Consignaciones</h4>
         <Table striped bordered hover size="sm">
         <thead>
             <tr>
@@ -306,7 +306,7 @@ const ExpandedComponent = ({ data }) => {
         </thead>
         <tbody>
             {stock.map(fila=>(
-                <tr>
+                <tr key={fila.isbn}>
                 <td>{fila.titulo}</td>
                 <td>{fila.isbn}</td>
                 <td>{fila.stock}</td>

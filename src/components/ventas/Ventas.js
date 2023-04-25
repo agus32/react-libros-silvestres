@@ -101,7 +101,7 @@ const handleSeleccionadoAdd = (event) => {
             <Form.Select value={inputs.libro} name="libro" onChange={handleChange}>
                 <option value="">Seleccione un libro</option>
                 {libros.map((libro) => (
-                    <option key={libro.isbn} value={libro.isbn}>{libro.titulo}</option>
+                    <option key={libro.isbn} value={libro.isbn}>{libro.titulo} ({libro.stock})</option>
                 ))}
             </Form.Select>
         </Form.Group>

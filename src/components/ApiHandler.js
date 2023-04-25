@@ -286,6 +286,23 @@ export const PostCliente = async (inputs) => {
 
 }
 
+export const PostConsignacion = async (inputs) => {
+    try{
+        const response = await fetch(`http://localhost:${API_PORT}/consignacion`, {
+            method: "POST",
+            body: inputs,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+            });
+        const data = await response.json();
+        !response.ok ? alert(data.error) : alert(data.message);
+        return data;
+    }catch(error){
+        console.log(error);
+    }
+
+}
+
+
 
 
 export const DeletePersonFromBook = async ({isbn,id,type}) => {
