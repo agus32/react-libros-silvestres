@@ -225,9 +225,11 @@ const columns =(medioDePago) =>([
 const ExpandedComponent = ({ data }) => {
   const [loading, setLoading] = React.useState(true);
   const [ventas, setVentas] = React.useState(null);
+  const [path, setPath] = React.useState(null);
 
   React.useEffect(() => {
           fetchVentas();
+          
       }, [data.id]);
 
   const fetchVentas = async () => {
@@ -236,14 +238,28 @@ const ExpandedComponent = ({ data }) => {
           setVentas(venta);
           
           setLoading(false);
+          getPath(venta);
+          
       } catch (error) {
           console.error(error);
           setLoading(false);
       }
   };
   
+  
+  const getPath = (venta)=> {
+    
+    if(venta != null){
+      try{
+        setPath(require(`../../comprobantes/facturas/${venta.file_path}`));
+      }catch{
+        console.log("no hay archivo");
+      }
+    } 
+    
+  }
 
-
+  
   if(loading){
       return <p>Loading...</p>
   }
@@ -272,6 +288,7 @@ const ExpandedComponent = ({ data }) => {
           
       </tbody>
       </Table>
+      <Button variant="success" onClick={() => window.open(path, '_blank')}>Factura</Button>
       </div>
   );
   }

@@ -220,6 +220,7 @@ const ExpandedComponent = ({ data }) => {
     const [loading, setLoading] = React.useState(true);
     const [ventas, setVentas] = React.useState(null);
     const [stock, setStock] = React.useState(null);
+    const [path, setPath] = React.useState(null);
 
     React.useEffect(() => {
             fetchVentas();
@@ -234,6 +235,7 @@ const ExpandedComponent = ({ data }) => {
             const results = await Promise.all(promises);
             const response = await GetStockById(data.id);   
             setStock(response);
+            getPath(response);
             setVentas(results);
             setLoading(false);
             
@@ -243,6 +245,17 @@ const ExpandedComponent = ({ data }) => {
         }
     };
 
+    const getPath = (venta)=> {
+    
+        if(venta != null){
+          try{
+            setPath(require(`../../comprobantes/remitos/${venta.file_path}`));
+          }catch{
+            console.log("no hay archivo");
+          }
+        } 
+        
+      }
 
 
     if(loading){
@@ -316,6 +329,7 @@ const ExpandedComponent = ({ data }) => {
             
         </tbody>
         </Table>
+        <Button variant="success" onClick={() => window.open(path, '_blank')}>Remito</Button>
         </div>
     );
     }
