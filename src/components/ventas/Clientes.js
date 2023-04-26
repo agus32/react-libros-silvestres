@@ -249,7 +249,7 @@ const ExpandedComponent = ({ data }) => {
     
         if(venta != null){
           try{
-            setPath(require(`../../comprobantes/remitos/${venta.file_path}`));
+            setPath(require(`../../comprobantes/remitos/${venta.path}`));
           }catch{
             console.log("no hay archivo");
           }
