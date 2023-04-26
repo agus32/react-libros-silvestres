@@ -251,9 +251,11 @@ const ExpandedComponent = ({ data }) => {
     
     if(venta != null){
       try{
+        console.log("archivo: ", `../../comprobantes/facturas/${venta.file_path}`)
         setPath(require(`../../comprobantes/facturas/${venta.file_path}`));
-      }catch{
+      }catch(e){
         console.log("no hay archivo");
+        console.log(e);
       }
     } 
     
